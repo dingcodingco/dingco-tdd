@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DingcoTDD Polls</title>
+</head>
+<body>
+<h1 th:text="${question.questionText}">question text</h1>
+<ul>
+    <th:block th:each="choice : ${question.choices}">
+        <p th:text="'Choice: ' + ${choice.choiceText}">Choice: ...</p>
+        <p th:text="'Vote Count: ' + ${choice.votes}">Vote Count: ...</p>
+    </th:block>
+</ul>
+</body>
+</html>

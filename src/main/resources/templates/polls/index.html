@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DingcoTDD Polls</title>
+</head>
+<body>
+<ul th:if="${!questionList.isEmpty()}">
+    <li th:each="question : ${questionList}">
+        <a th:href="@{/polls/{id}/(id=${question.id})}">
+            <span th:if="${question.wasPublishedRecently()}">[New]</span>
+            <span th:text="${question.questionText}">question text</span>
+        </a>
+    </li>
+</ul>
+<p th:if="${questionList.isEmpty()}">등록된 설문조사가 없습니다.</p>
+</body>
+</html>
