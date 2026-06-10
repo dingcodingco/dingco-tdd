@@ -5,8 +5,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class Choice {
 
     @Id
@@ -27,25 +31,5 @@ public class Choice {
         this.question = question;
         this.choiceText = choiceText;
         question.getChoices().add(this);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Question getQuestion() {
-        return question;
-    }
-
-    public String getChoiceText() {
-        return choiceText;
-    }
-
-    public int getVotes() {
-        return votes;
-    }
-
-    public void setVotes(int votes) {
-        this.votes = votes;
     }
 }
