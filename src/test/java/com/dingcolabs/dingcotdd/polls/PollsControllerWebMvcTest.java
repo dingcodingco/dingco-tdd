@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -48,5 +49,17 @@ class PollsControllerWebMvcTest {
 
         mockMvc.perform(get("/polls/99/"))
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void indexQueriesRepository() throws Exception {
+        when(questionRepository.findByPubDateLessThanEqualOrderByPubDateDesc(any()))
+            .thenReturn(List.of());
+
+        mockMvc.perform(get("/polls/"))
+            .andExpect(status().isOk());
+
+        // 컨트롤러가 레포지토리 메서드를 실제로 호출했는지 검증
+        verify(questionRepository).findByPubDateLessThanEqualOrderByPubDateDesc(any());
     }
 }
