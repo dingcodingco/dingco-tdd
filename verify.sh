@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # verify.sh — TDD 실습 프로젝트가 "정상 동작" 하는지 자동으로 검증한다.
-#   1) JDK 21 확인  2) ./gradlew test 가 19개 테스트 전부 통과  3) bootRun 으로 :8080 기동·응답
+#   1) JDK 21 확인  2) ./gradlew test 가 24개 테스트 전부 통과  3) bootRun 으로 :8080 기동·응답
 #
 # 사전 조건: JDK 21 설치. (시스템 기본 java 가 21이 아니면 JAVA_HOME 을 21로 지정)
 set -uo pipefail
@@ -20,7 +20,7 @@ else
   bad "Java 21 이 아니다. JAVA_HOME 을 JDK 21 로 지정 후 다시 실행하세요 (예: export JAVA_HOME=\$(/usr/libexec/java_home -v 21))"
 fi
 
-echo "=== 2) ./gradlew test (19개 테스트) ==="
+echo "=== 2) ./gradlew test (24개 테스트) ==="
 if ./gradlew clean test --console=plain >/tmp/dingcotdd-test.log 2>&1; then
   ok "BUILD SUCCESSFUL — 테스트 통과"
   # 테스트 리포트에서 실제 실행/실패 수 확인
@@ -29,7 +29,7 @@ if ./gradlew clean test --console=plain >/tmp/dingcotdd-test.log 2>&1; then
             | xargs sed -n 's/.*tests="\([0-9]*\)".*/\1/p' 2>/dev/null \
             | awk '{s+=$1} END{print s}')
   echo "     실행된 테스트 수: ${TOTAL:-?}"
-  if [[ "${TOTAL:-0}" -ge 19 ]]; then ok "테스트 19개 이상 실행됨"; else bad "기대한 19개보다 적게 실행됨 (${TOTAL:-0})"; fi
+  if [[ "${TOTAL:-0}" -ge 24 ]]; then ok "테스트 24개 이상 실행됨"; else bad "기대한 24개보다 적게 실행됨 (${TOTAL:-0})"; fi
 else
   bad "테스트 실패 — /tmp/dingcotdd-test.log 확인"
   tail -20 /tmp/dingcotdd-test.log | sed 's/^/     /'

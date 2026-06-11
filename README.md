@@ -48,10 +48,13 @@ dingco-tdd/
 ├─ src/test/java/com/dingcolabs/dingcotdd/
 │  ├─ StringMethodsTest.java            # JUnit 5 기본 예제 (3)
 │  └─ polls/
-│     ├─ QuestionModelTest.java         # wasPublishedRecently 단위 테스트 (3)
-│     ├─ QuestionIndexViewTests.java    # 목록 페이지 MockMvc 테스트 (6)
-│     ├─ QuestionDetailViewTests.java   # 세부 페이지 MockMvc 테스트 (4)
-│     └─ QuestionResultViewTests.java   # 결과 페이지 MockMvc 테스트 (3)
+│     ├─ QuestionModelTest.java         # Unit: wasPublishedRecently 단위 테스트 (3)
+│     ├─ QuestionRepositoryTest.java    # Integration: @DataJpaTest 레포 슬라이스 (2)
+│     ├─ PollsControllerWebMvcTest.java # Integration: @WebMvcTest 웹 슬라이스 (2)
+│     ├─ PollsFunctionalTest.java       # Functional: @SpringBootTest(RANDOM_PORT)+TestRestTemplate (1)
+│     ├─ QuestionIndexViewTests.java    # Integration: @SpringBootTest+MockMvc 목록 페이지 (6)
+│     ├─ QuestionDetailViewTests.java   # Integration: @SpringBootTest+MockMvc 세부 페이지 (4)
+│     └─ QuestionResultViewTests.java   # Integration: @SpringBootTest+MockMvc 결과 페이지 (3)
 ├─ verify.sh                            # 정상 동작 자동 검증 (5개 체크)
 └─ screenshots/                         # 강의 교재에서 쓰는 실행 화면 캡처
 ```
@@ -60,13 +63,13 @@ dingco-tdd/
 - **Spring Boot 3.3.5** (Spring Web · Thymeleaf · Spring Data JPA)
 - **Java 21**, **Gradle**(Groovy DSL)
 - **H2** in-memory DB (별도 설치 불필요, 콘솔 `/h2-console`)
-- 테스트: **JUnit 5** + `@SpringBootTest` + **MockMvc** (실제 브라우저 없이 HTTP 레이어 검증)
-- 기능 테스트(Selenium)는 개념 설명용으로 교재에 등장하며, 자동 검증은 MockMvc 로 대체
+- 테스트: **JUnit 5** — Unit(순수), Integration(`@DataJpaTest` · `@WebMvcTest` · `@SpringBootTest`+MockMvc+`@Transactional`), Functional(`@SpringBootTest(RANDOM_PORT)`+TestRestTemplate)
+- 기능 테스트(Selenium)는 개념 설명용으로 교재에 등장하며, 자동 검증은 MockMvc / TestRestTemplate 로 대체
 
 ## 검증 결과 (실제 실행 확인됨)
 `./verify.sh` 실행 시 5개 체크 모두 통과:
 - Java 21 사용 중 ✅
-- `./gradlew test` → **BUILD SUCCESSFUL**, 테스트 **19개** 전부 통과 ✅
+- `./gradlew test` → **BUILD SUCCESSFUL**, 테스트 **24개** 전부 통과 ✅
 - `http://localhost:8080/polls/` → **200 OK** ✅
 - 질문 목록(`<ul>`) 정상 렌더링 ✅
 
