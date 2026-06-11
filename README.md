@@ -4,7 +4,7 @@
 Spring Boot 로 직접 해보는 실습 프로젝트다.
 
 흐름은 강의와 같다:
-**기능 테스트(Selenium) 개념을 잡는다 → JUnit 5 로 단위 테스트를 익힌다 → Spring MVC + Thymeleaf + JPA 로 설문조사 앱을 test-first 로 구현한다 → `./gradlew test` 로 전부 통과(green)시킨다.**
+**기능 테스트(`@SpringBootTest(RANDOM_PORT)` + TestRestTemplate) 개념을 잡는다 → JUnit 5 로 단위 테스트를 익힌다 → Spring MVC + Thymeleaf + JPA 로 설문조사 앱을 test-first 로 구현한다 → `./gradlew test` 로 전부 통과(green)시킨다.**
 
 ## 준비물
 - **JDK 21** — `java -version` 으로 확인 (21이 아니면 아래 JAVA_HOME 안내 참고)
@@ -16,13 +16,13 @@ Spring Boot 로 직접 해보는 실습 프로젝트다.
 # 0) (시스템 기본 java 가 21이 아니라면) JDK 21 지정
 export JAVA_HOME=$(/usr/libexec/java_home -v 21)   # macOS
 
-# 1) 테스트 전체 실행 — 19개가 모두 통과(green)하는지 확인
+# 1) 테스트 전체 실행 — 25개가 모두 통과(green)하는지 확인
 ./gradlew test
 
 # 2) 서버 기동 (데모 데이터 포함) → http://localhost:8080/polls/
 ./gradlew bootRun --args='--spring.profiles.active=demo'
 
-# 3) 정상 동작 자동 검증 (JDK21 / 테스트 19개 / 8080 기동·렌더링, 5개 체크)
+# 3) 정상 동작 자동 검증 (JDK21 / 테스트 25개 / 8080 기동·렌더링, 5개 체크)
 ./verify.sh
 ```
 
@@ -47,11 +47,11 @@ dingco-tdd/
 │     ├─ index.html  ├─ detail.html  └─ result.html
 ├─ src/test/java/com/dingcolabs/dingcotdd/
 │  ├─ StringMethodsTest.java            # JUnit 5 기본 예제 (3)
+│  ├─ FunctionalTest.java               # Functional: @SpringBootTest(RANDOM_PORT)+TestRestTemplate, @BeforeEach/@AfterEach (2)
 │  └─ polls/
 │     ├─ QuestionModelTest.java         # Unit: wasPublishedRecently 단위 테스트 (3)
 │     ├─ QuestionRepositoryTest.java    # Integration: @DataJpaTest 레포 슬라이스 (2)
 │     ├─ PollsControllerWebMvcTest.java # Integration: @WebMvcTest 웹 슬라이스 (2)
-│     ├─ PollsFunctionalTest.java       # Functional: @SpringBootTest(RANDOM_PORT)+TestRestTemplate (1)
 │     ├─ QuestionIndexViewTests.java    # Integration: @SpringBootTest+MockMvc 목록 페이지 (6)
 │     ├─ QuestionDetailViewTests.java   # Integration: @SpringBootTest+MockMvc 세부 페이지 (4)
 │     └─ QuestionResultViewTests.java   # Integration: @SpringBootTest+MockMvc 결과 페이지 (3)
@@ -64,12 +64,12 @@ dingco-tdd/
 - **Java 21**, **Gradle**(Groovy DSL)
 - **H2** in-memory DB (별도 설치 불필요, 콘솔 `/h2-console`)
 - 테스트: **JUnit 5** — Unit(순수), Integration(`@DataJpaTest` · `@WebMvcTest` · `@SpringBootTest`+MockMvc+`@Transactional`), Functional(`@SpringBootTest(RANDOM_PORT)`+TestRestTemplate)
-- 기능 테스트(Selenium)는 개념 설명용으로 교재에 등장하며, 자동 검증은 MockMvc / TestRestTemplate 로 대체
+- 기능/E2E 테스트는 `@SpringBootTest(RANDOM_PORT)` + TestRestTemplate 로 브라우저 없이 실제 HTTP 검증. (UI 클릭까지 자동화가 필요하면 Selenium·Playwright 같은 브라우저 도구를 쓴다 — 이 수업 범위 밖)
 
 ## 검증 결과 (실제 실행 확인됨)
 `./verify.sh` 실행 시 5개 체크 모두 통과:
 - Java 21 사용 중 ✅
-- `./gradlew test` → **BUILD SUCCESSFUL**, 테스트 **24개** 전부 통과 ✅
+- `./gradlew test` → **BUILD SUCCESSFUL**, 테스트 **25개** 전부 통과 ✅
 - `http://localhost:8080/polls/` → **200 OK** ✅
 - 질문 목록(`<ul>`) 정상 렌더링 ✅
 
